@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">AnymasterChat</string>
+    <string name="back">Back</string>
+    <string name="user_profile_logo">User profile logo</string>
+    <string name="verified">Verified</string>
+    <string name="open_menu">Open menu</string>
+    <string name="delivery_status">Delivery status</string>
+    <string name="edited">edited</string>
+    <string name="take_photo">Take photo</string>
+    <string name="send">Send</string>
+</resources>
