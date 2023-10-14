@@ -3,8 +3,8 @@ package com.dzaigames.anymasterchat.data.client
 import com.dzaigames.anymasterchat.data.model.MessageDto
 
 interface WebSocketClient {
-    var isSocketConnected: Boolean
+//    val isSocketConnected: StateFlow<Boolean>
     fun connect()
     fun disconnect()
-    fun send(message: MessageDto)
+    suspend fun send(message: MessageDto)
 }

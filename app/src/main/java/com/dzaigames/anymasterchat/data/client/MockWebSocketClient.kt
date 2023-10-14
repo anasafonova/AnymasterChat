@@ -10,27 +10,32 @@ private const val TAG = "MockWebSocketClient"
 class MockWebSocketClient @Inject constructor(
     private val messagesRepository: MessagesRepository
 ) : WebSocketClient {
-    override var isSocketConnected: Boolean = false
+
+//    private var _isSocketConnected: MutableStateFlow<Boolean> = MutableStateFlow(
+//        true
+//    )
+//    override val isSocketConnected: StateFlow<Boolean> = _isSocketConnected
+
     override fun connect() {
         Log.i(TAG, "WebSocket connected")
-        this.isSocketConnected = true
+//        _isSocketConnected.value = true
     }
 
     override fun disconnect() {
         Log.i(TAG, "WebSocket disconnected")
-        this.isSocketConnected = false
+//        _isSocketConnected.value = false
     }
 
-    override fun send(message: MessageDto) {
-        Log.i(TAG, "Send message with text: ${message.message}")
-        if (this.isSocketConnected) {
-            messagesRepository.addMessage(message)
+    override suspend fun send(message: MessageDto) {
+        Log.i(TAG, "Send message with text: ${message.message}") // ${_isSocketConnected.value}")
+//        if (_isSocketConnected.value) {
+        messagesRepository.addMessage(message)
 
-            sendAnswer(message = message)
-        }
+        sendReplay(message = message)
+//        }
     }
 
-    private fun sendAnswer(message: MessageDto) {
+    private fun sendReplay(message: MessageDto) {
         val echoMessage = MessageDto(
             id = message.id + 1,
             author = 2,

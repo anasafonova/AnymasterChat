@@ -4,11 +4,13 @@ import android.content.SharedPreferences
 import com.dzaigames.anymasterchat.data.manager.UserPreferencesManager
 import dagger.Module
 import dagger.Provides
+import javax.inject.Singleton
 
 @Module
 class UserPreferencesModule {
 
     @Provides
+    @Singleton
     fun provideSharedPreferences(userPrefs: SharedPreferences): UserPreferencesManager {
         return UserPreferencesManager(userPrefs = userPrefs)
     }

@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.ViewModelProvider
+import com.dzaigames.anymasterchat.data.client.MockWebSocketClient
 import com.dzaigames.anymasterchat.data.manager.UserPreferencesManager
 import com.dzaigames.anymasterchat.ui.chatScreen.screen.ChatScreen
 import com.dzaigames.anymasterchat.ui.chatScreen.viewModel.ChatScreenViewModel
@@ -27,6 +28,9 @@ class MainActivity : ComponentActivity() {
     @Inject
     lateinit var userPreferencesManager: UserPreferencesManager
 
+    @Inject
+    lateinit var webSocketClient: MockWebSocketClient
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -37,6 +41,8 @@ class MainActivity : ComponentActivity() {
         chatScreenViewModel.preset()
 
         userPreferencesManager.setDefaultUserId()
+
+        webSocketClient.connect()
 
         setContent {
             AnymasterChatTheme {
@@ -51,6 +57,11 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+    }
+
+    override fun onDestroy() {
+        webSocketClient.disconnect()
+        super.onDestroy()
     }
 }
 

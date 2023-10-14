@@ -155,7 +155,7 @@ fun ChatScreenContent(
                     messageText = ""
                     keyboard?.hide()
                     focusManager.clearFocus()
-                    viewModel.onEditComplete()
+                    viewModel.onMessageCompleted()
                     selectedMessage = null
                 },
                 onValueChange = {
@@ -166,7 +166,7 @@ fun ChatScreenContent(
                     messageText = ""
                     keyboard?.hide()
                     focusManager.clearFocus()
-                    viewModel.onEditComplete()
+                    viewModel.onMessageCompleted()
                     selectedMessage = null
                                   },
                 focusRequester = focusRequester
@@ -271,7 +271,7 @@ fun ChatScreenContent(
             },
             onEdit = {
                 messageText = it.message
-                viewModel.onEdit(it)
+                viewModel.onEdit()
                 focusRequester.requestFocus()
                 keyboard?.show()
             }
