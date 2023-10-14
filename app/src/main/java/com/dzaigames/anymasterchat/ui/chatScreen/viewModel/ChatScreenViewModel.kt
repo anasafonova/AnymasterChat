@@ -1,31 +1,29 @@
 package com.dzaigames.anymasterchat.ui.chatScreen.viewModel
 
-import androidx.compose.ui.graphics.RenderEffect
-import androidx.compose.ui.graphics.Shader
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.dzaigames.anymasterchat.data.manager.UserPreferencesManager
 import com.dzaigames.anymasterchat.data.model.MessageDto
+import com.dzaigames.anymasterchat.data.model.isMineMessage
 import com.dzaigames.anymasterchat.data.repo.MessagesRepository
+import com.dzaigames.anymasterchat.ui.chatScreen.model.ChatScreenState
 import com.dzaigames.anymasterchat.ui.chatScreen.model.MessageAction
+import com.dzaigames.anymasterchat.ui.chatScreen.model.MessagesUiState
 import com.dzaigames.anymasterchat.utils.PresetItemsInteractor
-import kotlinx.coroutines.CoroutineExceptionHandler
+import com.dzaigames.anymasterchat.utils.WhileUiSubscribed
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-typealias FullscreenEffect = Pair<Boolean, RenderEffect?>
-
 class ChatScreenViewModel @Inject constructor(
     private val messagesRepository: MessagesRepository,
-    private val presetItemsInteractor: PresetItemsInteractor
+    private val presetItemsInteractor: PresetItemsInteractor,
+    private val userPreferencesManager: UserPreferencesManager
 ): ViewModel() {
 //    val exceptionHandler = CoroutineExceptionHandler { context, exception ->
 //        viewModelScope.launch {
@@ -33,46 +31,13 @@ class ChatScreenViewModel @Inject constructor(
 //        }
 //    }
 //
-//    private val isRefreshing = MutableStateFlow(false)
-//
-//    private val isError = MutableStateFlow(false)
-//
-//    private val _fullscreen = MutableStateFlow(false)
-//    val fullscreen: StateFlow<Boolean> = _fullscreen
-//    fun setFullscreen(isFullscreen: Boolean) {
-//        _fullscreen.value = isFullscreen
-//    }
-//
-//    private val _blur = MutableStateFlow(false)
-//    val blur: StateFlow<Boolean> = _blur
-//    fun setBlurred(isBlurred: Boolean) {
-//        _blur.value = isBlurred
-//    }
-//
-//    private val _radiusX = MutableStateFlow(DEFAULT_BLUR)
-//    val radiusX: StateFlow<Float> = _radiusX
-//    fun setRadiusX(newValue: Float) {
-//        _radiusX.value = newValue
-//    }
-//
-//    private val _radiusY = MutableStateFlow(DEFAULT_BLUR)
-//    val radiusY: StateFlow<Float> = _radiusY
-//    fun setRadiusY(newValue: Float) {
-//        _radiusY.value = newValue
-//    }
+    private val isRefreshing = MutableStateFlow(false)
 
-//    private val blurEffectFlow = combine(_radiusX, _radiusY, _blur) { x, y, applyBlur ->
-//        if (applyBlur) {
-//            RenderEffect.createBlurEffect(x, y, Shader.TileMode.MIRROR)
-//        } else null
-//    }.stateIn(viewModelScope, SharingStarted.Eagerly, null)
+    private val isError = MutableStateFlow(false)
 
-//    val fullscreenEffectFlow: Flow<FullscreenEffect> =
-//        combine(_fullscreen, blurEffectFlow) { fullscreen, effect -> fullscreen to effect }
-//
-//    companion object {
-//        const val DEFAULT_BLUR = 8f
-//    }
+    private val isEdited = MutableStateFlow(false)
+
+    private val userId = userPreferencesManager.userId
 
     val messages: SharedFlow<List<MessageDto>> = messagesRepository
         .messages
@@ -85,6 +50,31 @@ class ChatScreenViewModel @Inject constructor(
 
     lateinit var messageActions: List<MessageAction>
 
+    val uiState: StateFlow<ChatScreenState> = combine(
+        isRefreshing,
+        isError,
+        isEdited
+    ) { refreshing, errorOccured, edited ->
+        val messagesState: MessagesUiState = MessagesUiState.Success
+
+        ChatScreenState(
+            messages = messagesState,
+            isRefreshing = refreshing,
+            isError = errorOccured,
+            isEdited = edited
+        )
+    }
+        .stateIn(
+            scope = viewModelScope,
+            started = WhileUiSubscribed,
+            initialValue = ChatScreenState(
+                messages = MessagesUiState.Loading,
+                isRefreshing = false,
+                isError = false,
+                isEdited = false
+            )
+        )
+
     fun preset() {
         viewModelScope.launch(Dispatchers.IO) {
             presetItemsInteractor.preset()
@@ -92,31 +82,43 @@ class ChatScreenViewModel @Inject constructor(
         }
     }
 
-//    val uiState: StateFlow<MainMenuUiState> = combine(
-//        questions,
-//        isRefreshing,
-//        isError
-//    ) { questionsResult, refreshing, errorOccurred ->
-//
-//        val questionsState: QuestionsUiState = when (questionsResult) {
-//            is Result.Success -> QuestionsUiState.Success(questionsResult.data)
-//            is Result.Loading -> QuestionsUiState.Loading
-//            is Result.Error -> QuestionsUiState.Error
-//        }
-//
-//        MainMenuUiState(
-//            questionsState,
-//            refreshing,
-//            errorOccurred
-//        )
-//    }
-//        .stateIn(
-//            scope = viewModelScope,
-//            started = WhileUiSubscribed,
-//            initialValue = MainMenuUiState(
-//                QuestionsUiState.Loading,
-//                isRefreshing = false,
-//                isError = false
-//            )
-//        )
+    fun checkMessageIsMine(message: MessageDto): Boolean {
+        return message.isMineMessage(userId = userId)
+    }
+
+    fun onEdit(message: MessageDto) {
+        viewModelScope.launch {
+            isEdited.emit(true)
+        }
+    }
+
+    fun onEditComplete() {
+        viewModelScope.launch {
+            isEdited.emit(false)
+        }
+    }
+
+    fun onMessageEdited(message: MessageDto) {
+        viewModelScope.launch(Dispatchers.IO) {
+            messagesRepository.editMessage(
+                message.copy(
+                    updatedAt = System.currentTimeMillis(),
+                    isEdited = true
+                )
+            )
+        }
+    }
+
+    fun onMessageSend(id: Int, text: String) {
+        val message = MessageDto(
+            id = id,
+            author = 1,
+            message = text,
+            createdAt = System.currentTimeMillis(),
+            updatedAt = System.currentTimeMillis()
+        )
+        viewModelScope.launch(Dispatchers.IO) {
+            messagesRepository.addMessage(message)
+        }
+    }
 }

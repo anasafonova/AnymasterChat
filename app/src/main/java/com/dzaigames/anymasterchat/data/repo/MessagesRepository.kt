@@ -10,6 +10,8 @@ interface MessagesRepository {
     var messageActions: List<MessageAction>
 
     fun getMessages(): Flow<List<MessageDto>>
+    fun addMessage(item: MessageDto)
+    fun editMessage(item: MessageDto)
 
     suspend fun refreshMessages()
 

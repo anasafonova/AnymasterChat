@@ -1,24 +1,22 @@
 package com.dzaigames.anymasterchat.ui.chatScreen.screen
 
 import android.graphics.Bitmap
-import android.graphics.RenderEffect
-import android.graphics.Shader
-import android.os.Build
-import android.util.Log
-import android.view.ContextMenu
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -26,15 +24,21 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.asComposeRenderEffect
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.dzaigames.anymasterchat.R
 import com.dzaigames.anymasterchat.data.model.MessageDto
+import com.dzaigames.anymasterchat.ui.chatScreen.model.ChatScreenState
 import com.dzaigames.anymasterchat.ui.chatScreen.model.MessageAction
 import com.dzaigames.anymasterchat.ui.chatScreen.viewModel.ChatScreenViewModel
 import com.dzaigames.anymasterchat.ui.theme.AnymasterChatTheme
@@ -42,97 +46,27 @@ import com.dzaigames.anymasterchat.ui.widget.ChatBar
 import com.dzaigames.anymasterchat.ui.widget.MessageContextMenu
 import com.dzaigames.anymasterchat.ui.widget.MessageField
 import com.dzaigames.anymasterchat.ui.widget.MessageLayout
-import com.dzaigames.anymasterchat.utils.modifyIf
+import com.dzaigames.anymasterchat.ui.widget.OrderBanner
+import com.dzaigames.anymasterchat.utils.isScrolledToTheEnd
 
 private const val USER_NAME = "Daniel"
 private const val USER_SURNAME = "Moris"
 private const val TASK_TEXT = "Cleaning of a two-room apartment"
 private const val TASK_PRICE = 1498.0
 
-
-@Composable
-@Preview(showSystemUi = true)
-fun ChatScreenPreview() {
-    val messages = listOf<MessageDto>(
-        MessageDto(
-            id = 1,
-            author = 1,
-            message = "Hi Daniel, my name is Eleni, I am a professional cleaner with 10 years of experience. I can come to you tomorrow morning. 2 bedroom apartment costs 30 euros and takes about 3 hours. Is it okay for you?",
-            isEdited = false,
-            createdAt = 1697195631000,
-            updatedAt = 1697195631000,
-            isRead = true,
-            isDelivered = true
-        ),
-        MessageDto(
-            id = 2,
-            author = 1,
-            message = "I can also wash terrace, windows and balcony for extra 20 euros if needed.",
-            isEdited = false,
-            createdAt = 1697195633000,
-            updatedAt = 1697195633000,
-            isRead = true,
-            isDelivered = true
-        ),
-        MessageDto(
-            id = 3,
-            author = 2,
-            message = "Hi Eleni, sounds good for me, tomorrow morning is perfect.",
-            isEdited = false,
-            createdAt = 1697195797000,
-            updatedAt = 1697195797000,
-            isRead = true,
-            isDelivered = true
-        )
-    )
-
-    ChatScreenContent(
-        messages = messages.sortedByDescending { it.createdAt },
-        messageActions = listOf(
-            MessageAction(
-                actionText = "Save as template",
-                actionIcon = R.drawable.ic_add_template,
-                onClick = {  }
-            )
-        ),
-        userName = "Daniel",
-        userSurname = "Moris",
-        profileBitmap = null,
-        isVerified = true,
-        taskText = "Cleaning of a two-room apartment",
-        taskPrice = 1498.0,
-        changeOffer = { }
-    )
-}
-
 @Composable
 fun ChatScreen(
     viewModel: ChatScreenViewModel
 ) {
-//    binding = ActivityMainBinding.inflate(layoutInflater)
-//    setContentView(binding.root)
-//
-//    binding.xRadius.bind(viewModel.radiusX, viewModel::setRadiusX)
-//    binding.yRadius.bind(viewModel.radiusY, viewModel::setRadiusY)
-//    binding.blurToggle.bind(viewModel.blur, viewModel::setBlurred)
-//    binding.fullscreenToggle.bind(viewModel.fullscreen, viewModel::setFullscreen)
-//
-//    viewModel.fullscreenEffectFlow.onEach { (fullscreen, effect) ->
-//        if (fullscreen) {
-//            binding.root.setRenderEffect(effect)
-//            binding.image.setRenderEffect(null)
-//        } else {
-//            binding.root.setRenderEffect(null)
-//            binding.image.setRenderEffect(effect)
-//        }
-//    }.launchIn(viewModel.viewModelScope)
-
     val messages = viewModel.messages.collectAsState(initial = listOf())
+    val uiState = viewModel.uiState.collectAsState()
 
     AnymasterChatTheme {
         ChatScreenContent(
             messages = messages.value,
             messageActions = viewModel.messageActions,
+            uiState = uiState.value,
+            viewModel = viewModel,
             userName = USER_NAME,
             userSurname = USER_SURNAME,
             profileBitmap = null,
@@ -144,12 +78,13 @@ fun ChatScreen(
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.S)
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
 fun ChatScreenContent(
     messages: List<MessageDto>,
     messageActions: List<MessageAction>,
+    uiState: ChatScreenState,
+    viewModel: ChatScreenViewModel,
     userName: String,
     userSurname: String,
     profileBitmap: Bitmap?,
@@ -160,10 +95,14 @@ fun ChatScreenContent(
 ) {
     val focusManager = LocalFocusManager.current
 
+    val focusRequester = remember { FocusRequester() }
+
+    val keyboard = LocalSoftwareKeyboardController.current
+
     val listState = rememberLazyListState()
 
-    var selectedMessageId by rememberSaveable {
-        mutableStateOf(-1)
+    var selectedMessage: MessageDto? by rememberSaveable {
+        mutableStateOf(null)
     }
 
     var expanded by remember {
@@ -171,6 +110,18 @@ fun ChatScreenContent(
     }
 
     var messageText by rememberSaveable { mutableStateOf("") }
+
+    LaunchedEffect(messages.size) {
+        if (!listState.isScrolledToTheEnd()) {
+            val itmIndex = listState.layoutInfo.totalItemsCount - 1
+            if (itmIndex >= 0) {
+                val lastItem = listState.layoutInfo.visibleItemsInfo.lastOrNull()
+                lastItem?.let {
+                    listState.animateScrollToItem(itmIndex, it.size + it.offset)
+                }
+            }
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -187,25 +138,52 @@ fun ChatScreenContent(
         bottomBar = {
             MessageField(
                 message = messageText,
-                onSend = { _ -> },
+                isEditing = uiState.isEdited,
+                onSend = { text ->
+                    if (uiState.isEdited) {
+                        viewModel.onMessageEdited(
+                            message = selectedMessage!!.copy(
+                                message = text
+                            )
+                        )
+                    } else {
+                        viewModel.onMessageSend(
+                            id = messages.size + 1,
+                            text = text
+                        )
+                    }
+                    messageText = ""
+                    keyboard?.hide()
+                    focusManager.clearFocus()
+                    viewModel.onEditComplete()
+                    selectedMessage = null
+                },
                 onValueChange = {
                     messageText = it
                 },
-                onDone = { focusManager.clearFocus() }
+                onDone = { focusManager.clearFocus() },
+                onCancelEditing = {
+                    messageText = ""
+                    keyboard?.hide()
+                    focusManager.clearFocus()
+                    viewModel.onEditComplete()
+                    selectedMessage = null
+                                  },
+                focusRequester = focusRequester
             )
         },
         modifier = Modifier
-            .modifyIf(selectedMessageId >= 0 && messages[selectedMessageId].author == 1) { // (Build.VERSION.SDK_INT < Build.VERSION_CODES.S)
-                graphicsLayer(
-                    renderEffect = RenderEffect.createBlurEffect(25f, 25f, Shader.TileMode.MIRROR)
-                        .asComposeRenderEffect()
-                )
-            }
+//            .modifyIf(selectedMessageId >= 0 && messages[selectedMessageId].author == 1) { // (Build.VERSION.SDK_INT < Build.VERSION_CODES.S)
+//                graphicsLayer(
+//                    renderEffect = RenderEffect.createBlurEffect(25f, 25f, Shader.TileMode.MIRROR)
+//                        .asComposeRenderEffect()
+//                )
+//            }
     ) { contentPadding ->
         Column {
             LazyColumn(
                 state = listState,
-                reverseLayout = true,
+//                reverseLayout = true,
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f)
@@ -220,13 +198,56 @@ fun ChatScreenContent(
                 verticalArrangement = Arrangement.spacedBy(8.dp),
                 contentPadding = PaddingValues(16.dp),
                 content = {
+                    item {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                        ) {
+                            Text(
+                                text = stringResource(id = R.string.today),
+                                style = TextStyle(
+                                    fontSize = 12.sp,
+                                    lineHeight = 16.8.sp,
+                                    fontWeight = FontWeight(400),
+                                    color = Color(0x66040C15),
+                                    textAlign = TextAlign.Center,
+                                ),
+                                modifier = Modifier
+                                    .wrapContentWidth()
+                                    .align(Alignment.Center)
+                            )
+                        }
+                    }
+
+                    item {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                        ) {
+                            OrderBanner(
+                                userName = userName,
+                                price = taskPrice,
+                                modifier = Modifier
+                                    .align(Alignment.Center)
+                            )
+                        }
+                    }
+
                     items(messages.size) {
                         MessageItem(
                             message = messages[it],
                             onLongPress = {
-                                selectedMessageId = it
+                                selectedMessage = messages[it]
                                 expanded = true
                             }
+//                            modifier = Modifier
+//                                .modifyIf(selectedMessageId == it) {
+//                                    onGloballyPositioned { coordinates ->
+//                                        messageSize = coordinates.size
+//                                        messagePositionInRoot = coordinates.positionInWindow()
+//
+//                                    }
+//                                }
                         )
                     }
                 }
@@ -234,13 +255,25 @@ fun ChatScreenContent(
         }
     }
 
-    if (selectedMessageId >= 0 && messages[selectedMessageId].author == 1) {
+    if (selectedMessage != null && viewModel.checkMessageIsMine(selectedMessage!!)) { // && selectedMessage!!.author == 1) {
+//        MessageItem(
+//            message = messages[selectedMessageId],
+//            modifier = Modifier
+//                .offset(x = messagePositionInRoot.x.dp, y = messagePositionInRoot.y.dp)
+//        )
         MessageContextMenu(
-            items = messageActions,
+            selectedMessage = selectedMessage!!,
+            actionItems = messageActions,
             expanded = expanded,
             onDismiss = {
-                expanded = it
-                selectedMessageId = -1
+                expanded = false
+//                selectedMessage = null
+            },
+            onEdit = {
+                messageText = it.message
+                viewModel.onEdit(it)
+                focusRequester.requestFocus()
+                keyboard?.show()
             }
         )
     }
@@ -249,8 +282,7 @@ fun ChatScreenContent(
 @Composable
 fun MessageItem(
     message: MessageDto?,
-    onLongPress: () -> Unit,
-    showUnblurred: Boolean = false
+    onLongPress: () -> Unit = {  }
 ) {
     if (message == null)
         return

@@ -2,7 +2,6 @@ package com.dzaigames.anymasterchat.ui.widget
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,6 +14,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -64,14 +64,16 @@ fun MessageLayout(
     isRead: Boolean,
     isFromMe: Boolean,
     isEdited: Boolean,
-    onLongPress: () -> Unit
+    onLongPress: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Box(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
+            .background(color = Color.Transparent)
     ) {
         Box(
-            modifier = Modifier
+            modifier = modifier
                 .width(295.dp)
                 .align(if (isFromMe) Alignment.CenterEnd else Alignment.CenterStart)
                 .wrapContentHeight(Alignment.CenterVertically)

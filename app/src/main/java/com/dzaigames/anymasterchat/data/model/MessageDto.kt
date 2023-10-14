@@ -6,11 +6,11 @@ data class MessageDto(
     val id: Int,
     val author: Int,
     var message: String,
-    var isEdited: Boolean,
+    var isEdited: Boolean = false,
     var createdAt: Long,
     var updatedAt: Long,
-    var isRead: Boolean,
-    var isDelivered: Boolean
+    var isRead: Boolean = true,
+    var isDelivered: Boolean = true
 )
 
 fun MessageDto.toEntity(): MessageEntity {
@@ -24,4 +24,8 @@ fun MessageDto.toEntity(): MessageEntity {
         isRead = isRead,
         isDelivered = isDelivered
     )
+}
+
+fun MessageDto.isMineMessage(userId: Int): Boolean {
+    return this.author == userId
 }

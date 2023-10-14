@@ -8,4 +8,10 @@
     <string name="edited">edited</string>
     <string name="take_photo">Take photo</string>
     <string name="send">Send</string>
+    <string name="edit_message">Edit message</string>
+    <string name="close">Close</string>
+    <string name="today">Today</string>
+    <string name="order_logo">Order logo</string>
+    <string name="customer_gets_your_offer">%s gets your offer for</string>
+    <string name="to_complete_the_deal">To complete the deal, %s must accept your offer, until that you can discuss the details here</string>
 </resources>

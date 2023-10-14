@@ -7,7 +7,13 @@ import dagger.Component
 import javax.inject.Singleton
 
 @Singleton
-@Component(modules = [DatabaseModule::class, MessagesRepositoryModule::class])
+@Component(
+    modules = [
+        DatabaseModule::class,
+        MessagesRepositoryModule::class,
+        SharedPreferencesModule::class,
+        UserPreferencesModule::class
+    ])
 interface ApplicationComponent {
     fun inject(mainActivity: MainActivity)
 

@@ -36,12 +36,28 @@ class OfflineFirstMessagesRepository @Inject constructor(
             .flowOn(Dispatchers.IO)
             .map { messages ->
                 messages.map { it.toDto() }
-                    .sortedByDescending { it.createdAt }
+                    .sortedBy { it.createdAt } //Descending
             }.onEach {
                 if (it.isEmpty()) {
                     refreshMessages()
                 }
             }
+    }
+
+    override fun addMessage(item: MessageDto) {
+        messagesDao.insertAllMessages(
+            items = listOf(
+                item.toEntity()
+            )
+        )
+    }
+
+    override fun editMessage(item: MessageDto) {
+        messagesDao.insertAllMessages(
+            items = listOf(
+                item.toEntity()
+            )
+        )
     }
 
     override suspend fun refreshMessages() {

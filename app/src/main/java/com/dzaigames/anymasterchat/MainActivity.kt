@@ -11,8 +11,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.ViewModelProvider
+import com.dzaigames.anymasterchat.data.manager.UserPreferencesManager
 import com.dzaigames.anymasterchat.ui.chatScreen.screen.ChatScreen
-import com.dzaigames.anymasterchat.ui.chatScreen.screen.ChatScreenPreview
 import com.dzaigames.anymasterchat.ui.chatScreen.viewModel.ChatScreenViewModel
 import com.dzaigames.anymasterchat.ui.chatScreen.viewModel.ChatScreenViewModelFactory
 import com.dzaigames.anymasterchat.ui.theme.AnymasterChatTheme
@@ -24,6 +24,9 @@ class MainActivity : ComponentActivity() {
     @Inject
     lateinit var chatScreenViewModelFactory: ChatScreenViewModelFactory
 
+    @Inject
+    lateinit var userPreferencesManager: UserPreferencesManager
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -32,6 +35,8 @@ class MainActivity : ComponentActivity() {
         chatScreenViewModel = ViewModelProvider(this, chatScreenViewModelFactory)[ChatScreenViewModel::class.java]
 
         chatScreenViewModel.preset()
+
+        userPreferencesManager.setDefaultUserId()
 
         setContent {
             AnymasterChatTheme {
