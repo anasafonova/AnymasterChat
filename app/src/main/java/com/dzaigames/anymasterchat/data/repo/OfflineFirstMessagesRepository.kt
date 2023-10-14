@@ -52,14 +52,6 @@ class OfflineFirstMessagesRepository @Inject constructor(
         )
     }
 
-    override fun editMessage(item: MessageDto) {
-        messagesDao.insertAllMessages(
-            items = listOf(
-                item.toEntity()
-            )
-        )
-    }
-
     override suspend fun refreshMessages() {
         TODO("Not yet implemented")
     }

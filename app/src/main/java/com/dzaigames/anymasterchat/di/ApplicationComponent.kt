@@ -12,8 +12,10 @@ import javax.inject.Singleton
         DatabaseModule::class,
         MessagesRepositoryModule::class,
         SharedPreferencesModule::class,
-        UserPreferencesModule::class
-    ])
+        UserPreferencesModule::class,
+        WebSocketClientModule::class
+    ]
+)
 interface ApplicationComponent {
     fun inject(mainActivity: MainActivity)
 

@@ -23,7 +23,7 @@ import javax.inject.Inject
 class ChatScreenViewModel @Inject constructor(
     private val messagesRepository: MessagesRepository,
     private val presetItemsInteractor: PresetItemsInteractor,
-    private val userPreferencesManager: UserPreferencesManager
+    userPreferencesManager: UserPreferencesManager
 ): ViewModel() {
 //    val exceptionHandler = CoroutineExceptionHandler { context, exception ->
 //        viewModelScope.launch {
@@ -86,7 +86,7 @@ class ChatScreenViewModel @Inject constructor(
         return message.isMineMessage(userId = userId)
     }
 
-    fun onEdit(message: MessageDto) {
+    fun onEdit() {
         viewModelScope.launch {
             isEdited.emit(true)
         }
@@ -100,7 +100,7 @@ class ChatScreenViewModel @Inject constructor(
 
     fun onMessageEdited(message: MessageDto) {
         viewModelScope.launch(Dispatchers.IO) {
-            messagesRepository.editMessage(
+            messagesRepository.addMessage(
                 message.copy(
                     updatedAt = System.currentTimeMillis(),
                     isEdited = true
