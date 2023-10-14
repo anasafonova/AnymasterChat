@@ -3,42 +3,63 @@ package com.dzaigames.anymasterchat.data.client
 import android.util.Log
 import com.dzaigames.anymasterchat.data.model.MessageDto
 import com.dzaigames.anymasterchat.data.repo.MessagesRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
+import okhttp3.OkHttpClient
 import javax.inject.Inject
+import org.mockito.Mock
 
 private const val TAG = "MockWebSocketClient"
+
 
 class MockWebSocketClient @Inject constructor(
     private val messagesRepository: MessagesRepository
 ) : WebSocketClient {
-    override var isSocketConnected: Boolean = false
+
+    @Mock
+    private lateinit var okHttpClient: OkHttpClient
+
+    private val wsManager = WebSocketTransport(
+        okHttpClient = okHttpClient,
+        onMessage = this::receive
+    )
+
     override fun connect() {
-        Log.i(TAG, "WebSocket connected")
-        this.isSocketConnected = true
+        wsManager.connectWebSocket("")
     }
 
     override fun disconnect() {
         Log.i(TAG, "WebSocket disconnected")
-        this.isSocketConnected = false
+    }
+
+    fun receive(text: String) {
+        runBlocking(context = Dispatchers.IO) {
+            val now = System.currentTimeMillis()
+            val receivedMessage = MessageDto(
+                id = messagesRepository.getLastMessageId() + 1,
+                author = 2,
+                message = text,
+                createdAt = now,
+                updatedAt = now
+            )
+            messagesRepository.addMessage(receivedMessage)
+        }
     }
 
     override fun send(message: MessageDto) {
         Log.i(TAG, "Send message with text: ${message.message}")
-        if (this.isSocketConnected) {
+        if (wsManager.sendMessage(message.message)) {
             messagesRepository.addMessage(message)
-
-            sendAnswer(message = message)
+            sendAnswer(message)
+        } else {
+            Log.i(TAG, "Error sending message")
         }
+
+        sendAnswer(message = message)
     }
 
     private fun sendAnswer(message: MessageDto) {
-        val echoMessage = MessageDto(
-            id = message.id + 1,
-            author = 2,
-            message = "Hello! I've received your message with text: ${message.message}",
-            createdAt = System.currentTimeMillis(),
-            updatedAt = System.currentTimeMillis()
-        )
-        messagesRepository.addMessage(echoMessage)
+        receive("Hello! I've received your message with text: ${message.message}")
     }
 
 }

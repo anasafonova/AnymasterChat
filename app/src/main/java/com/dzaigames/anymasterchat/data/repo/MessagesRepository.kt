@@ -17,5 +17,6 @@ interface MessagesRepository {
     suspend fun presetMessages(items: List<MessageDto>)
 
     fun presetMessageActions(items: List<MessageAction>)
+    suspend fun getLastMessageId(): Int
 
 }

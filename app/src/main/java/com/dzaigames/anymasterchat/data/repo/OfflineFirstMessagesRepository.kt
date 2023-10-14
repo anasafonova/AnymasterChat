@@ -7,12 +7,7 @@ import com.dzaigames.anymasterchat.data.model.toEntity
 import com.dzaigames.anymasterchat.ui.chatScreen.model.MessageAction
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.shareIn
+import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 
 class OfflineFirstMessagesRepository @Inject constructor(
@@ -62,5 +57,9 @@ class OfflineFirstMessagesRepository @Inject constructor(
 
     override fun presetMessageActions(items: List<MessageAction>) {
         messageActions = items
+    }
+
+    override suspend fun getLastMessageId(): Int {
+        return messages.first().sortedByDescending { it.id }[0].id
     }
 }

@@ -23,4 +23,5 @@ interface MessagesDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAllMessages(items: List<MessageEntity>)
+
 }
