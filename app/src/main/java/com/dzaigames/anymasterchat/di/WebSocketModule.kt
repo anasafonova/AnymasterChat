@@ -10,10 +10,13 @@ import javax.inject.Singleton
 
 @Module
 class WebSocketClientModule {
+
     @Provides
     @Singleton
     fun provideWebSocketClient(messagesRepository: MessagesRepository): WebSocketClient {
-        return MockWebSocketClient(messagesRepository = messagesRepository)
+        return MockWebSocketClient(
+            messagesRepository = messagesRepository
+        )
     }
 
     @Provides

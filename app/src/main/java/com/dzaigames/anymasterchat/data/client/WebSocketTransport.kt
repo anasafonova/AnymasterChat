@@ -4,12 +4,14 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.WebSocket
 import okhttp3.WebSocketListener
-import org.mockito.internal.matchers.Null
 
 private const val TAG = "WebSocketClient"
 
-class WebSocketTransport(private val okHttpClient: OkHttpClient, val onMessage: (String) -> Unit) {
-    lateinit var webSocket: WebSocket
+class WebSocketTransport(
+    private val okHttpClient: OkHttpClient,
+    val onMessage: (String) -> Unit
+) {
+    private lateinit var webSocket: WebSocket
 
     fun connectWebSocket(url: String) {
         val request = Request.Builder()
@@ -29,7 +31,7 @@ class WebSocketTransport(private val okHttpClient: OkHttpClient, val onMessage: 
         }
 
         override fun onMessage(webSocket: WebSocket, text: String) {
-            onMessage(text)
+            onMessage(text) //receiver.sendReplay()
         }
 
         override fun onClosed(webSocket: WebSocket, code: Int, reason: String) {
