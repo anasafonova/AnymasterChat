@@ -30,7 +30,7 @@ In addition, the replayed message automatically updates whenever the original me
 - UI **Jetpack Compose**: A modern toolkit for building native Android user interfaces.
 - **Coroutines**, **KotlinFlow**: To handle asynchronous operations, such as adding data to database, sending and receiving messages over web socket connection, and updating UI.
 - DI **Dagger2**: A fast dependency injection framework for Android and Java.
-- Single Activity: Utilizes a single activity architecture for efficient future app navigation.
+- Single Activity: Utilizes a single activity architecture for efficient app navigation (in future ☺️).
 - ORM **Room**: A persistence library provided by Android Jetpack that simplifies database integration with SQLite on Android.
 
 ## Installation and Setup
