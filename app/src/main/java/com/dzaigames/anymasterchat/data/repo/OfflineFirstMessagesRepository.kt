@@ -20,6 +20,7 @@ class OfflineFirstMessagesRepository @Inject constructor(
 ) : MessagesRepository {
 
     private val repoScope = CoroutineScope(Dispatchers.IO)
+
     override val messages by lazy {
         getMessages()
             .shareIn(
@@ -36,7 +37,7 @@ class OfflineFirstMessagesRepository @Inject constructor(
             .flowOn(Dispatchers.IO)
             .map { messages ->
                 messages.map { it.toDto() }
-                    .sortedBy { it.createdAt } //Descending
+                    .sortedBy { it.createdAt }
             }.onEach {
                 if (it.isEmpty()) {
                     refreshMessages()
@@ -53,7 +54,7 @@ class OfflineFirstMessagesRepository @Inject constructor(
     }
 
     override suspend fun refreshMessages() {
-        TODO("Not yet implemented")
+        // Refresh message list from server via REST API
     }
 
     override suspend fun presetMessages(items: List<MessageDto>) {

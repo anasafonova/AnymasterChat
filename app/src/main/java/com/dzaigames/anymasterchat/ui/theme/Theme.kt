@@ -17,19 +17,21 @@ import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
 private val DarkColorScheme = darkColorScheme(
-    primary = Color.White,
+    primary = SecondaryBlack,
     secondary = SecondaryBlack,
     tertiary = TertiaryGrey,
     primaryContainer = BackgroundBlue,
-    secondaryContainer = BackgroundGrey
+    secondaryContainer = BackgroundGrey,
+    background = Color.White
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = Color.White,
+    primary = SecondaryBlack,
     secondary = SecondaryBlack,
     tertiary = TertiaryGrey,
     primaryContainer = BackgroundBlue,
-    secondaryContainer = BackgroundGrey
+    secondaryContainer = BackgroundGrey,
+    background = Color.White
 
     /* Other default colors to override
     background = Color(0xFFFFFBFE),
@@ -62,7 +64,7 @@ fun AnymasterChatTheme(
     if (!view.isInEditMode) {
         SideEffect {
             val window = (view.context as Activity).window
-            window.statusBarColor = Color.White.toArgb() //colorScheme.primary.toArgb()
+            window.statusBarColor = colorScheme.primary.toArgb()
             WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = darkTheme
         }
     }

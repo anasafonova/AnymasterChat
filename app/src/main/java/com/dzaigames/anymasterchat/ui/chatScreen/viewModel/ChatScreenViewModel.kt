@@ -91,7 +91,6 @@ class ChatScreenViewModel @Inject constructor(
     fun onMessageEdited(message: MessageDto) {
         viewModelScope.launch(Dispatchers.IO) {
             sendMessageUseCase.invoke(
-//            messagesRepository.addMessage(
                 message.copy(
                     updatedAt = System.currentTimeMillis(),
                     isEdited = true
@@ -110,7 +109,6 @@ class ChatScreenViewModel @Inject constructor(
         )
         viewModelScope.launch(Dispatchers.IO) {
             sendMessageUseCase.invoke(message)
-//            messagesRepository.addMessage(message)
         }
     }
 }

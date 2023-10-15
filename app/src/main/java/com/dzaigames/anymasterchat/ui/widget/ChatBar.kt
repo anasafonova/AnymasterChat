@@ -1,23 +1,15 @@
 package com.dzaigames.anymasterchat.ui.widget
 
 import android.graphics.Bitmap
-import android.graphics.RenderEffect
-import android.graphics.Shader
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Divider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.asComposeRenderEffect
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.dzaigames.anymasterchat.ui.theme.AnymasterChatTheme
@@ -63,26 +55,14 @@ fun ChatBar(
                     isVerified = isVerified
                 )
             }
-            Spacer(
-                modifier = Modifier
-                    .padding(0.dp)
-                    .fillMaxWidth()
-                    .height(1.dp)
-                    .background(color = MaterialTheme.colorScheme.tertiary)
-            )
+            Divider()
             TaskLayout(
                 taskText = taskText,
                 taskPrice = taskPrice
             ) {
                 changeOffer()
             }
-            Spacer(
-                modifier = Modifier
-                    .padding(0.dp)
-                    .fillMaxWidth()
-                    .height(1.dp)
-                    .background(color = MaterialTheme.colorScheme.tertiary)
-            )
+            Divider()
         }
     }
 }

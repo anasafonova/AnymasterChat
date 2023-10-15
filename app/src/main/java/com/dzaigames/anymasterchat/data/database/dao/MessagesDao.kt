@@ -15,10 +15,10 @@ interface MessagesDao {
     @Query("select * from messages where id = :id")
     fun messageById(id: Int): Flow<List<MessageEntity>>
 
-    @Query("UPDATE messages SET isEdited = 1 WHERE id = :id")
+    @Query("update messages set isEdited = 1 where id = :id")
     fun markMessageAsEdited(id: Int): Int
 
-    @Query("UPDATE messages SET isRead = 1 WHERE id = :id")
+    @Query("update messages set isRead = 1 where id = :id")
     fun markMessageAsRead(id: Int): Int
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
