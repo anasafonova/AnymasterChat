@@ -37,7 +37,7 @@ class OfflineFirstMessagesRepository @Inject constructor(
             .flowOn(Dispatchers.IO)
             .map { messages ->
                 messages.map { it.toDto() }
-                    .sortedBy { it.createdAt }
+                    .sortedBy { it.id }
             }.onEach {
                 if (it.isEmpty()) {
                     refreshMessages()
