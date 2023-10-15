@@ -21,7 +21,7 @@ class DatabaseModule {
 
     @Singleton
     @Provides
-    fun providesQuizDao(database: ChatDatabase): MessagesDao {
+    fun providesMessagesDao(database: ChatDatabase): MessagesDao {
         return database.messagesDao()
     }
 }

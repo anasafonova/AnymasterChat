@@ -1,6 +1,5 @@
 package com.dzaigames.anymasterchat.ui.widget
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
@@ -22,7 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.dzaigames.anymasterchat.R
 import com.dzaigames.anymasterchat.ui.theme.AnymasterChatTheme
-import com.dzaigames.anymasterchat.utils.toDateTime
+import com.dzaigames.anymasterchat.util.toDateTime
 
 @Composable
 @Preview(showBackground = true)

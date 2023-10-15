@@ -21,7 +21,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.dzaigames.anymasterchat.ui.theme.AnymasterChatTheme
-import com.dzaigames.anymasterchat.utils.modifyIf
+import com.dzaigames.anymasterchat.util.modifyIf
 
 @Composable
 @Preview(showBackground = true)

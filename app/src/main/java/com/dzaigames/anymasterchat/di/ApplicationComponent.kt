@@ -12,8 +12,8 @@ import javax.inject.Singleton
         DatabaseModule::class,
         MessagesRepositoryModule::class,
         SharedPreferencesModule::class,
-        UserPreferencesModule::class,
-        WebSocketClientModule::class
+        UserManagerModule::class,
+        WebSocketModule::class
     ]
 )
 interface ApplicationComponent {

@@ -1,4 +1,4 @@
-package com.dzaigames.anymasterchat.utils
+package com.dzaigames.anymasterchat.util
 
 import androidx.compose.ui.Modifier
 
