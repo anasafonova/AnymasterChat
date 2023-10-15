@@ -12,7 +12,7 @@ import com.dzaigames.anymasterchat.data.database.model.MessageEntity
 
     exportSchema = false
 )
-//@TypeConverters(JsonMapConverter::class)
+
 abstract class ChatDatabase : RoomDatabase() {
 
     abstract fun messagesDao() : MessagesDao
