@@ -66,6 +66,6 @@ git clone https://github.com/anasafonova/AnymasterChat.git
 
 ## License
 
-📝 Simple Chat App is open source and released under the [MIT License](https://opensource.org/licenses/MIT). Feel free to modify and distribute the app as per the terms of the license.
+📝 AnymasterChat is open source and released under the [MIT License](https://opensource.org/licenses/MIT). Feel free to modify and distribute the app as per the terms of the license.
 
-🎉 Thank you for using Simple Chat App! If you have any further questions or need assistance, please don't hesitate to reach out. Happy chatting! 🎉
+🎉 Thank you for using AnymasterChat! If you have any further questions or need assistance, please don't hesitate to reach out. Happy chatting! 🎉
