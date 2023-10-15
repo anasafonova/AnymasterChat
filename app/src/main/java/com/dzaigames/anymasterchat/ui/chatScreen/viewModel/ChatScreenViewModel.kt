@@ -6,6 +6,7 @@ import com.dzaigames.anymasterchat.data.manager.UserPreferencesManager
 import com.dzaigames.anymasterchat.data.model.MessageDto
 import com.dzaigames.anymasterchat.data.model.isMineMessage
 import com.dzaigames.anymasterchat.data.repo.MessagesRepository
+import com.dzaigames.anymasterchat.domain.usecase.SendMessageUseCase
 import com.dzaigames.anymasterchat.ui.chatScreen.model.ChatScreenState
 import com.dzaigames.anymasterchat.ui.chatScreen.model.MessageAction
 import com.dzaigames.anymasterchat.ui.chatScreen.model.MessagesUiState
@@ -23,14 +24,9 @@ import javax.inject.Inject
 class ChatScreenViewModel @Inject constructor(
     private val messagesRepository: MessagesRepository,
     private val presetItemsInteractor: PresetItemsInteractor,
-    userPreferencesManager: UserPreferencesManager
+    userPreferencesManager: UserPreferencesManager,
+    private val sendMessageUseCase: SendMessageUseCase
 ): ViewModel() {
-//    val exceptionHandler = CoroutineExceptionHandler { context, exception ->
-//        viewModelScope.launch {
-//            isError.emit(true)
-//        }
-//    }
-//
     private val isRefreshing = MutableStateFlow(false)
 
     private val isError = MutableStateFlow(false)
@@ -41,12 +37,6 @@ class ChatScreenViewModel @Inject constructor(
 
     val messages: SharedFlow<List<MessageDto>> = messagesRepository
         .messages
-//        .stateIn(
-//            scope = viewModelScope,
-//            started = SharingStarted.Lazily,
-//            initialValue = listOf()
-//        )
-//        .asResult()
 
     lateinit var messageActions: List<MessageAction>
 
@@ -92,7 +82,7 @@ class ChatScreenViewModel @Inject constructor(
         }
     }
 
-    fun onEditComplete() {
+    fun onMessageCompleted() {
         viewModelScope.launch {
             isEdited.emit(false)
         }
@@ -100,7 +90,7 @@ class ChatScreenViewModel @Inject constructor(
 
     fun onMessageEdited(message: MessageDto) {
         viewModelScope.launch(Dispatchers.IO) {
-            messagesRepository.addMessage(
+            sendMessageUseCase.invoke(
                 message.copy(
                     updatedAt = System.currentTimeMillis(),
                     isEdited = true
@@ -118,7 +108,7 @@ class ChatScreenViewModel @Inject constructor(
             updatedAt = System.currentTimeMillis()
         )
         viewModelScope.launch(Dispatchers.IO) {
-            messagesRepository.addMessage(message)
+            sendMessageUseCase.invoke(message)
         }
     }
 }

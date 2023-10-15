@@ -11,7 +11,7 @@ data class ChatScreenState(
 
 @Immutable
 sealed interface MessagesUiState {
-    object Success : MessagesUiState //(val messages: List<MessageDto>) : MessagesUiState
+    object Success : MessagesUiState
     object Loading : MessagesUiState
     object Error : MessagesUiState
 }
