@@ -3,8 +3,8 @@ package com.dzaigames.anymasterchat.di
 import com.dzaigames.anymasterchat.data.database.dao.MessagesDao
 import com.dzaigames.anymasterchat.data.repo.MessagesRepository
 import com.dzaigames.anymasterchat.data.repo.OfflineFirstMessagesRepository
-import com.dzaigames.anymasterchat.utils.PresetFakeMessageDataInteractor
-import com.dzaigames.anymasterchat.utils.PresetItemsInteractor
+import com.dzaigames.anymasterchat.util.PresetFakeMessageDataInteractor
+import com.dzaigames.anymasterchat.util.PresetItemsInteractor
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton

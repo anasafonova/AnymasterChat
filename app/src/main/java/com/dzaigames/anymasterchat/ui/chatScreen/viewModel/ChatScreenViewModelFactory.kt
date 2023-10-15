@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.dzaigames.anymasterchat.data.manager.UserPreferencesManager
 import com.dzaigames.anymasterchat.data.repo.MessagesRepository
 import com.dzaigames.anymasterchat.domain.usecase.SendMessageUseCase
-import com.dzaigames.anymasterchat.utils.PresetItemsInteractor
+import com.dzaigames.anymasterchat.util.PresetItemsInteractor
 import javax.inject.Inject
 
 class ChatScreenViewModelFactory @Inject constructor(

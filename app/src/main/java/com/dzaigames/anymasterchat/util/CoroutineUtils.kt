@@ -1,4 +1,4 @@
-package com.dzaigames.anymasterchat.utils
+package com.dzaigames.anymasterchat.util
 
 import kotlinx.coroutines.flow.SharingStarted
 

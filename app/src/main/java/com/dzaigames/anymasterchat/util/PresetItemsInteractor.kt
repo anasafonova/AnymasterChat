@@ -1,4 +1,4 @@
-package com.dzaigames.anymasterchat.utils
+package com.dzaigames.anymasterchat.util
 
 import com.dzaigames.anymasterchat.R
 import com.dzaigames.anymasterchat.data.repo.MessagesRepository

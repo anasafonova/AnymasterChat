@@ -48,7 +48,7 @@ import com.dzaigames.anymasterchat.ui.widget.MessageContextMenu
 import com.dzaigames.anymasterchat.ui.widget.MessageField
 import com.dzaigames.anymasterchat.ui.widget.MessageLayout
 import com.dzaigames.anymasterchat.ui.widget.OrderBanner
-import com.dzaigames.anymasterchat.utils.isScrolledToTheEnd
+import com.dzaigames.anymasterchat.util.isScrolledToTheEnd
 
 private const val USER_NAME = "Daniel"
 private const val USER_SURNAME = "Moris"
