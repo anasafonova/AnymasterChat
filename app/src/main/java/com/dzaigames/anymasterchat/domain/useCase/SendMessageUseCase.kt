@@ -1,4 +1,4 @@
-package com.dzaigames.anymasterchat.domain.usecase
+package com.dzaigames.anymasterchat.domain.useCase
 
 import com.dzaigames.anymasterchat.data.client.WebSocketClient
 import com.dzaigames.anymasterchat.data.model.MessageDto

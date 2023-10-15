@@ -6,7 +6,7 @@ import com.dzaigames.anymasterchat.data.manager.UserPreferencesManager
 import com.dzaigames.anymasterchat.data.model.MessageDto
 import com.dzaigames.anymasterchat.data.model.isMineMessage
 import com.dzaigames.anymasterchat.data.repo.MessagesRepository
-import com.dzaigames.anymasterchat.domain.usecase.SendMessageUseCase
+import com.dzaigames.anymasterchat.domain.useCase.SendMessageUseCase
 import com.dzaigames.anymasterchat.ui.chatScreen.model.ChatScreenState
 import com.dzaigames.anymasterchat.ui.chatScreen.model.MessageAction
 import com.dzaigames.anymasterchat.ui.chatScreen.model.MessagesUiState
