@@ -170,9 +170,9 @@ fun ChatScreenContent(
             bottomBar = {
                 MessageField(
                     message = messageText,
-                    isEditing = uiState.isEdited,
+                    isEditing = uiState.isEditing,
                     onSend = { text ->
-                        if (uiState.isEdited) {
+                        if (uiState.isEditing) {
                             sendEditedMessage(text)
                         } else {
                             sendNewMessage(text)

@@ -31,7 +31,7 @@ class ChatScreenViewModel @Inject constructor(
 
     private val isError = MutableStateFlow(false)
 
-    private val isEdited = MutableStateFlow(false)
+    private val isEditing = MutableStateFlow(false)
 
     private val userId = userPreferencesManager.userId
 
@@ -43,15 +43,15 @@ class ChatScreenViewModel @Inject constructor(
     val uiState: StateFlow<ChatScreenState> = combine(
         isRefreshing,
         isError,
-        isEdited
-    ) { refreshing, errorOccured, edited ->
+        isEditing
+    ) { refreshing, errorOccurred, editing ->
         val messagesState: MessagesUiState = MessagesUiState.Success
 
         ChatScreenState(
             messages = messagesState,
             isRefreshing = refreshing,
-            isError = errorOccured,
-            isEdited = edited
+            isError = errorOccurred,
+            isEditing = editing
         )
     }
         .stateIn(
@@ -61,7 +61,7 @@ class ChatScreenViewModel @Inject constructor(
                 messages = MessagesUiState.Loading,
                 isRefreshing = false,
                 isError = false,
-                isEdited = false
+                isEditing = false
             )
         )
 
@@ -78,13 +78,13 @@ class ChatScreenViewModel @Inject constructor(
 
     fun onEdit() {
         viewModelScope.launch {
-            isEdited.emit(true)
+            isEditing.emit(true)
         }
     }
 
     fun onMessageCompleted() {
         viewModelScope.launch {
-            isEdited.emit(false)
+            isEditing.emit(false)
         }
     }
 

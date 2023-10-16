@@ -6,7 +6,7 @@ data class ChatScreenState(
     val messages: MessagesUiState,
     val isRefreshing: Boolean,
     val isError: Boolean,
-    val isEdited: Boolean
+    val isEditing: Boolean
 )
 
 @Immutable
