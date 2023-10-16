@@ -120,11 +120,13 @@ fun ChatScreenContent(
     }
 
     val sendEditedMessage: (String) -> Unit = { text: String ->
-        viewModel.onMessageEdited(
-            message = selectedMessage!!.copy(
-                message = text
+        if (text != selectedMessage!!.message) {
+            viewModel.onMessageEdited(
+                message = selectedMessage!!.copy(
+                    message = text
+                )
             )
-        )
+        }
     }
 
     val onDismiss: () -> Unit = {
