@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalComposeUiApi::class)
 
-package com.dzaigames.anymasterchat.ui.widget
+package com.dzaigames.anymasterchat.ui.widget.textField
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

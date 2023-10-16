@@ -1,4 +1,4 @@
-package com.dzaigames.anymasterchat.ui.widget
+package com.dzaigames.anymasterchat.ui.widget.button
 
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton

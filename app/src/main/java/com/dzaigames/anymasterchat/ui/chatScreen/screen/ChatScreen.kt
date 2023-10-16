@@ -43,11 +43,11 @@ import com.dzaigames.anymasterchat.ui.chatScreen.model.MessageAction
 import com.dzaigames.anymasterchat.ui.chatScreen.viewModel.ChatScreenViewModel
 import com.dzaigames.anymasterchat.ui.theme.AnymasterChatTheme
 import com.dzaigames.anymasterchat.ui.widget.ChatBar
-import com.dzaigames.anymasterchat.ui.widget.CloudyLayout
-import com.dzaigames.anymasterchat.ui.widget.MessageContextMenu
-import com.dzaigames.anymasterchat.ui.widget.MessageField
-import com.dzaigames.anymasterchat.ui.widget.MessageLayout
-import com.dzaigames.anymasterchat.ui.widget.OrderBanner
+import com.dzaigames.anymasterchat.ui.widget.layout.CloudyLayout
+import com.dzaigames.anymasterchat.ui.widget.contextMenu.MessageContextMenu
+import com.dzaigames.anymasterchat.ui.widget.textField.MessageField
+import com.dzaigames.anymasterchat.ui.widget.layout.MessageLayout
+import com.dzaigames.anymasterchat.ui.widget.layout.OrderBanner
 import com.dzaigames.anymasterchat.util.isScrolledToTheEnd
 
 private const val USER_NAME = "Daniel"

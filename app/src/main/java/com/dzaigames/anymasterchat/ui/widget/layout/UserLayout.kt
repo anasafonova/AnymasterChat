@@ -1,4 +1,4 @@
-package com.dzaigames.anymasterchat.ui.widget
+package com.dzaigames.anymasterchat.ui.widget.layout
 
 import android.graphics.Bitmap
 import androidx.compose.foundation.Image
@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.dzaigames.anymasterchat.R
+import com.dzaigames.anymasterchat.ui.widget.label.VerifiedLabel
 
 @Composable
 @Preview

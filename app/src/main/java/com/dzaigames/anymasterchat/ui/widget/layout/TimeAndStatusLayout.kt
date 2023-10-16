@@ -1,4 +1,4 @@
-package com.dzaigames.anymasterchat.ui.widget
+package com.dzaigames.anymasterchat.ui.widget.layout
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
